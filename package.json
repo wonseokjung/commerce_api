@@ -9,6 +9,9 @@
     "start": "node dist/index.js",
     "postinstall": "npm run build"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -27,8 +30,5 @@
   "devDependencies": {
     "ts-node-dev": "^2.0.0",
     "@types/node": "^20.11.17"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   }
 }

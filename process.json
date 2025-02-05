@@ -1,0 +1,8 @@
+{
+  "name": "backend",
+  "script": "dist/index.js",
+  "instances": 1,
+  "env": {
+    "NODE_ENV": "production"
+  }
+} 
