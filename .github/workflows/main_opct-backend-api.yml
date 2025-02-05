@@ -1,8 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
-# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - opct-backend-api
+name: Build and deploy Node.js app to Azure Web App - opct-backend-api
 
 on:
   push:
@@ -19,31 +18,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python version
-        uses: actions/setup-python@v5
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
         with:
-          python-version: '3.9'
-
-      - name: Create and start virtual environment
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-      
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-        
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+          node-version: '18.x'
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
 
-      - name: Upload artifact for deployment jobs
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: python-app
-          path: |
-            release.zip
-            !venv/
+          name: node-app
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -59,23 +46,23 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: python-app
+          name: node-app
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-
       
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2A0B541095E84AB0811CA3EF561C40B9 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_44E2757053BB4E0F9849BFF1095DAF3A }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_604A181E86534080A0831009413B3251 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3964E773C4E44FB290D05131E38A5436 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_ED3328FD1DC44701B0CA836D47F75037 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_373211C225964CE2887C5B7BF2032B88 }}
 
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'opct-backend-api'
           slot-name: 'Production'
+          package: .
           
