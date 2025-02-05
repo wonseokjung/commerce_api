@@ -8,7 +8,7 @@ import CryptoJS from 'crypto-js';
 
 dotenv.config();
 
-const app = express();
+const app: Application = express();
 const port = process.env.PORT || 4000;
 
 app.use(cors({
@@ -69,7 +69,7 @@ const SECRET_KEY = process.env.REACT_APP_COUPANG_SECRET_KEY;
 
 const generateApiHeader = (method: string, url: string, timestamp: string) => {
   const message = `${method}\n${url}\n${timestamp}\n${SECRET_KEY}`;
-  const hmac = CryptoJS.HmacSHA256(message, SECRET_KEY);
+  const hmac = CryptoJS.HmacSHA256(message, SECRET_KEY || '');
   const hash = CryptoJS.enc.Base64.stringify(hmac);
 
   return {
@@ -118,19 +118,19 @@ app.post('/api/deeplink', async (req, res) => {
 });
 
 // AI 추천 API
-app.post('/api/recommendations/ai', async (req, res) => {
+app.post('/api/recommendations/ai', async (req: Request, res: Response) => {
   try {
     const { preferences } = req.body;
     const timestamp = Date.now().toString();
     
-    let recommendedKeywords = [];
+    const recommendedKeywords: string[] = [];
     
     if (preferences.category === '운동용품') {
-      recommendedKeywords = ['요가매트', '아령', '폼롤러'];
+      recommendedKeywords.push('요가매트', '아령', '폼롤러');
     } else if (preferences.category === '건강식품') {
-      recommendedKeywords = ['프로틴', '비타민', '오메가3'];
+      recommendedKeywords.push('프로틴', '비타민', '오메가3');
     } else if (preferences.category === '운동복') {
-      recommendedKeywords = ['기능성티셔츠', '레깅스', '운동화'];
+      recommendedKeywords.push('기능성티셔츠', '레깅스', '운동화');
     }
     
     const recommendations = [];
@@ -170,7 +170,7 @@ app.post('/api/shopping-assistant', async (req: Request, res: Response) => {
     if (message.includes("추천") || message.includes("찾아") || message.includes("보여줘")) {
       shouldSearchProducts = true;
       // 검색 키워드 추출 로직
-      const keywords = message.split(" ").filter(word => 
+      const keywords = message.split(" ").filter((word: string) => 
         !["추천", "해줘", "찾아", "보여줘", "주세요"].includes(word)
       );
       searchKeyword = keywords.join(" ");
