@@ -3,6 +3,8 @@
   "script": "dist/index.js",
   "instances": 1,
   "env": {
-    "NODE_ENV": "production"
-  }
+    "NODE_ENV": "production",
+    "PORT": 8080
+  },
+  "exec_mode": "cluster"
 } 
